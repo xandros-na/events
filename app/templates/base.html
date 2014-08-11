@@ -1,0 +1,37 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Events{% endblock %}
+
+{% block header %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.css') }}>
+{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-default" role="navigation">
+    <div class="navbar-header">
+        <ul class="nav navbar-nav">
+            <li><a class="navbar-brand" href="{{ url_for('events.index') }}">Events</a></li>
+            {% if not session.logged_in %}
+            <li><a class="navbar-brand" href="{{ url_for('events.login') }}">Login</a></li>
+            {% else %}
+            <li><a class="navbar-brand" href="{{ url_for('events.logout') }}">Logout</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% for msgs in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ msgs }}
+    </div>
+    {% endfor %}
+    {% block page_content %}
+    {% endblock %}
+</div>
+{% endblock %}
