@@ -10,12 +10,12 @@ class BaseConfig(object):
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
     SECRET_KEY = os.environ.get('SECRET_KEY') or 's3cr3t'
-    SQLALCH_DB_URI = os.environ.get('DEV_DB_URI') or \
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DB_URI') or \
             'sqlite:///' + os.path.join(basedir, 'dev.sqlite')
 
 class ProductionConfig(BaseConfig):
     DEBUG = False
-    SQALCH_DB_URI = os.environ.get('DB_URI') or \
+    SQALCHEMY_DATABASE_URI = os.environ.get('DB_URI') or \
             'sqlite:///' + os.path.join(basedir, 'db.sqlite')
 
 config = {

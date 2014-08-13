@@ -1,8 +1,15 @@
 from flask.ext.wtf import Form
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, DateField
 from wtforms.validators import Required, Length
 
 class LoginForm(Form):
     username = StringField('Username', validators=[Required(), Length(1, 64)])
     password = PasswordField('Password', validators=[Required()])
     submit = SubmitField('Log In')
+
+class EventForm(Form):
+    title = StringField('Title', validators=[Required(), Length(1, 128)])
+    room = StringField('Room', validators=[Required(), Length(1, 12)])
+    date = DateField('Date')
+    submit = SubmitField('Post')
+

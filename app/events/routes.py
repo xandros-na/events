@@ -1,6 +1,8 @@
 from . import events
+from ..models import Events
+from .. import db
 from flask import render_template, request, current_app, redirect, url_for, flash, session
-from .forms import LoginForm
+from .forms import LoginForm, EventForm
 
 @events.route('/')
 def index():
@@ -18,6 +20,19 @@ def login():
             flash('Login successful')
             return redirect(url_for('events.index'))
     return render_template('events/login.html', form=form)
+
+@events.route('/new', methods=['GET', 'POST'])
+def new_event():
+    form = EventForm()
+    if form.validate_on_submit():
+        event = Events(title=form.title.data,
+                room=form.room.data,
+                date=form.date.data)
+        db.session.add(event)
+        db.session.commit()
+        flash('Event added')
+        return redirect(url_for('events.index'))
+    return render_template('events/new_event.html', form=form)
 
 @events.route('/logout')
 def logout():
