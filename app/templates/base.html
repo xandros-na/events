@@ -2,9 +2,9 @@
 
 {% block title %}Events{% endblock %}
 
-{% block header %}
+{% block head %}
 {{ super() }}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.css') }}>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.css') }}">
 {% endblock %}
 
 {% block navbar %}
@@ -15,6 +15,7 @@
             {% if not session.logged_in %}
             <li><a class="navbar-brand" href="{{ url_for('events.login') }}">Login</a></li>
             {% else %}
+            <li><a class="navbar-brand" href="{{ url_for('events.new_event') }}">Add Event</a></li>
             <li><a class="navbar-brand" href="{{ url_for('events.logout') }}">Logout</a></li>
             {% endif %}
         </ul>

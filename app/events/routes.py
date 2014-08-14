@@ -6,7 +6,8 @@ from .forms import LoginForm, EventForm
 
 @events.route('/')
 def index():
-    return render_template('events/index.html')
+    event_list = Events.query.order_by(Events.date.desc())
+    return render_template('events/index.html', event_list=event_list)
 
 @events.route('/login', methods=['GET', 'POST'])
 def login():
@@ -23,15 +24,19 @@ def login():
 
 @events.route('/new', methods=['GET', 'POST'])
 def new_event():
-    form = EventForm()
-    if form.validate_on_submit():
-        event = Events(title=form.title.data,
+    if not session.get('logged_in'):
+        flash('You must login as admin to add an event')
+        return redirect(url_for('events.login'))
+    else:
+        form = EventForm()
+        if form.validate_on_submit():
+            event = Events(title=form.title.data,
                 room=form.room.data,
                 date=form.date.data)
-        db.session.add(event)
-        db.session.commit()
-        flash('Event added')
-        return redirect(url_for('events.index'))
+            db.session.add(event)
+            db.session.commit()
+            flash('Event added')
+            return redirect(url_for('events.index'))
     return render_template('events/new_event.html', form=form)
 
 @events.route('/logout')
