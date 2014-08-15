@@ -6,6 +6,8 @@ class BaseConfig(object):
     SECRET_KEY = os.environ.get('SECRET_KEY')
     ADMIN = os.environ.get('ADMIN')
     ADMIN_PASS = os.environ.get('ADMIN_PASS')
+    USER = os.environ.get('USER')
+    USER_PASS = os.environ.get('USER_PASS')
 
 class DevelopmentConfig(BaseConfig):
     DEBUG = True

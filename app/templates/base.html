@@ -12,10 +12,12 @@
     <div class="navbar-header">
         <ul class="nav navbar-nav">
             <li><a class="navbar-brand" href="{{ url_for('events.index') }}">Events</a></li>
-            {% if not session.logged_in %}
-            <li><a class="navbar-brand" href="{{ url_for('events.login') }}">Login</a></li>
-            {% else %}
+            {% if session.admin %}
             <li><a class="navbar-brand" href="{{ url_for('events.new_event') }}">Add Event</a></li>
+            {% elif not session.admin and not session.user %}
+            <li><a class="navbar-brand" href="{{ url_for('events.login') }}">Login</a></li>
+            {% endif %}
+            {% if session.admin or session.user %}
             <li><a class="navbar-brand" href="{{ url_for('events.logout') }}">Logout</a></li>
             {% endif %}
         </ul>
