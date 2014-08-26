@@ -1,13 +1,32 @@
 {% extends "base.html" %}
-
 {% block page_content %}
 <ul class="entries">
+    <h2 id="marker"></h2>
     {% for event in event_list %}
-    <h2>{{ event.title }}</h2>
+    <h2 id= {{ event.id }} >{{ event.title }}</h2>
     <h4>{{ event.room|safe }}</h4>
-    <p>{{ event.date }}</p>
+    <p>{{ event.thedate }}</p>
     {% else %}
         <em>No events here so far</em>
     {% endfor %}
 </ul>
+<script type="text/javascript">
+    setInterval(function() {
+        $.getJSON($SCRIPT_ROOT + '/test', {}, function(data) {
+            var data_id = parseInt(data.id);
+            if (data_id != -1) {
+                var to_str = String(data_id);
+                var h2_id = document.getElementById(to_str);
+                if (h2_id != null) {
+                } else {
+                    if (! $('#new').length) {
+                    console.log(data.posted_date);
+                    $('#marker').before('<h2 id="new">' + data.title + '</h2><h4>' + data.room + '</h4><p>' + data.thedate + '</p>');
+                    }
+                }
+            }
+            return false;
+        });
+    }, 3000);
+</script>
 {% endblock %}

@@ -13,4 +13,5 @@ class Events(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(128), nullable=False)
     room = db.Column(db.String(12), nullable=False)
-    date = db.Column(db.DateTime())
+    thedate = db.Column(db.DateTime())
+    posted_date = db.Column(db.String(128), nullable=False)

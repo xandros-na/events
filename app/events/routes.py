@@ -1,12 +1,21 @@
+from datetime import datetime
 from . import events
 from ..models import Events
 from .. import db
-from flask import render_template, request, current_app, redirect, url_for, flash, session
+from flask import render_template, request, current_app, redirect, url_for, flash, session, jsonify
 from .forms import LoginForm, EventForm, UserForm
+
+@events.route('/test')
+def test():
+    new_event = Events.query.order_by(Events.posted_date.desc()).first()
+    if new_event is None:
+        return jsonify(id=-1, title=None, room=None, date=None)
+    else:
+        return jsonify(id=new_event.id, title=new_event.title, room=new_event.room, thedate=new_event.thedate)
 
 @events.route('/')
 def index():
-    event_list = Events.query.order_by(Events.date.desc())
+    event_list = Events.query.order_by(Events.thedate.desc())
     return render_template('events/index.html', event_list=event_list)
 
 @events.route('/register')
@@ -44,9 +53,12 @@ def new_event():
     else:
         form = EventForm()
         if form.validate_on_submit():
+            posted_date = datetime.now()
+            posted_date = str(posted_date.strftime('%Y-%m-%d %H:%M:%S'))
             event = Events(title=form.title.data,
                 room=form.room.data,
-                date=form.date.data)
+                thedate=form.date.data,
+                posted_date=posted_date)
             db.session.add(event)
             db.session.commit()
             flash('Event added')
