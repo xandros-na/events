@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, DateField, IntegerField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, DateTimeField, IntegerField
 from wtforms.validators import Required, Length
 
 class LoginForm(Form):
@@ -10,7 +10,7 @@ class LoginForm(Form):
 class EventForm(Form):
     title = StringField('Title', validators=[Required(), Length(1, 128)])
     room = StringField('Room', validators=[Required(), Length(1, 12)])
-    date = DateField('Date')
+    date = DateTimeField('Date', description='hint: 2014-07-12 16:30:00 converts to Jul 12 2014, 4:30:00 PM')
     submit = SubmitField('Post')
 
 class UserForm(Form):
