@@ -2,7 +2,7 @@ from datetime import datetime
 from . import events
 from ..models import Events
 from .. import db
-from flask import render_template, request, current_app, redirect, url_for, flash, session, jsonify
+from flask import render_template, request, current_app, redirect, url_for, flash, session, jsonify, Response
 from .forms import LoginForm, EventForm, UserForm
 
 @events.route('/test')
@@ -64,6 +64,24 @@ def new_event():
             flash('Event added')
             return redirect(url_for('events.index'))
     return render_template('events/new_event.html', form=form)
+
+@events.route('/edit_event/<int:id>', methods=['GET', 'POST'])
+def edit_event(id):
+    if not session.get('admin'):
+        flash('You must login as admin to edit an event')
+        return redirect(url_for('events.login'))
+    else:
+        event = Events.query.get_or_404(id)
+        form = EventForm(title=event.title, room=event.room, date=event.thedate)
+        if form.validate_on_submit():
+            posted_date = datetime.now()
+            posted_date = str(posted_date.strftime('%Y-%m-%d %H:%M:%S'))
+            form.to_model(event, posted_date)
+            db.session.add(event)
+            db.session.commit()
+            return redirect(url_for('events.index'))
+        form.from_model(event)
+        return render_template('events/edit_event.html', form=form)
 
 @events.route('/logout')
 def logout():

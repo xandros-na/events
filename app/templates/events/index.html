@@ -10,6 +10,9 @@
         var d = new Date(dateString);
         $('#{{ event.id }}').after('<p>' + "{{ event.room|safe }}<br>" + d.toDateString() + ', ' + d.toLocaleTimeString() + '</p>'); 
     </script>
+    {% if session.admin %}
+    <a href={{ url_for('events.edit_event', id=event.id) }}>edit</a>
+    {% endif %}
     {% else %}
         <em id="em">No events here so far</em>
     {% endfor %}
