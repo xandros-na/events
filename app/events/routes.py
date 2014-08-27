@@ -9,9 +9,9 @@ from .forms import LoginForm, EventForm, UserForm
 def test():
     new_event = Events.query.order_by(Events.posted_date.desc()).first()
     if new_event is None:
-        return jsonify(id=-1, title=None, room=None, date=None)
+        return jsonify(id=-1, title=None, room=None, date=None, replaced_id=None)
     else:
-        return jsonify(id=new_event.id, title=new_event.title, room=new_event.room, thedate=new_event.thedate)
+        return jsonify(id=new_event.id, title=new_event.title, room=new_event.room, thedate=new_event.thedate, replaced_id=new_event.replaced_id)
 
 @events.route('/')
 def index():
@@ -58,7 +58,8 @@ def new_event():
             event = Events(title=form.title.data,
                 room=form.room.data,
                 thedate=form.date.data,
-                posted_date=posted_date)
+                posted_date=posted_date,
+                replaced_id=-1)
             db.session.add(event)
             db.session.commit()
             flash('Event added')
@@ -76,11 +77,17 @@ def edit_event(id):
         if form.validate_on_submit():
             posted_date = datetime.now()
             posted_date = str(posted_date.strftime('%Y-%m-%d %H:%M:%S'))
-            form.to_model(event, posted_date)
-            db.session.add(event)
+            replaced_id = event.id
+            db.session.delete(event)
+            edited_event = Events(title=form.title.data,
+                room=form.room.data,
+                thedate=form.date.data,
+                posted_date=posted_date,
+                replaced_id=replaced_id)
+            db.session.add(edited_event)
             db.session.commit()
+            flash('Successfully updated event')
             return redirect(url_for('events.index'))
-        form.from_model(event)
         return render_template('events/edit_event.html', form=form)
 
 @events.route('/logout')
