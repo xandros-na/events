@@ -4,12 +4,11 @@
     <h2 id="marker"></h2>
     {% for event in event_list %}
     <h2 id= {{ event.id }} >{{ event.title }}</h2>
-    <h4 id=room{{ event.id }}>{{ event.room|safe }}</h4>
     <script type="text/javascript">
         var dateString = "{{ event.thedate }}";
         dateString = dateString.replace(/-/g, ' ');
         var d = new Date(dateString);
-        $('#room{{ event.id }}').after('<p>' + d.toDateString() + ', ' + d.toLocaleTimeString() + '</p>'); 
+        $('#{{ event.id }}').after('<p>' + "{{ event.room|safe }}<br>" + d.toDateString() + ', ' + d.toLocaleTimeString() + '</p>'); 
     </script>
     {% else %}
         <em id="em">No events here so far</em>
@@ -30,7 +29,7 @@
                     dateString = dateString.replace(/-/g, ' ');
                     dateString = dateString.replace(/GMT/g, ' ');
                     var d = new Date(dateString);
-                    $('#marker').before('<h2 id="new">' + data.title + '</h2><h4>' + data.room + '</h4><p>' + d.toDateString() + ', ' + d.toLocaleTimeString() + '</p>');
+                    $('#marker').before('<h2 id="new">' + data.title + '</h2><p>' + data.room + '<br>' + d.toDateString() + ', ' + d.toLocaleTimeString() + '</p>');
                     }
                 }
             }
