@@ -44,7 +44,7 @@ def login():
     usernames = [current_app.config['ADMIN'], current_app.config['USER']]
     passwords = [current_app.config['ADMIN_PASS'], current_app.config['USER_PASS']]
     form = LoginForm()
-    if request.method == 'POST' and form.validate_on_submit():
+    if form.validate_on_submit():
         if form.username.data not in usernames or form.password.data not in passwords:
             flash('invalid credentials')
         else:
