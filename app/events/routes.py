@@ -5,13 +5,25 @@ from .. import db
 from flask import render_template, request, current_app, redirect, url_for, flash, session, jsonify, Response
 from .forms import LoginForm, EventForm, UserForm
 
-@events.route('/test')
-def test():
+@events.route('/update')
+def update():
     new_event = Events.query.order_by(Events.posted_date.desc()).first()
     if new_event is None:
         return jsonify(id=-1, title=None, room=None, date=None, replaced_id=None)
     else:
         return jsonify(id=new_event.id, title=new_event.title, room=new_event.room, thedate=new_event.thedate, replaced_id=new_event.replaced_id)
+
+@events.route('/delete/<int:id>', methods=['GET', 'POST'])
+def delete(id):
+    if not session.get('admin'):
+        flash('You must login as admin to delete an event')
+        return redirect(url_for('events.login'))
+    else:
+        event = Events.query.get_or_404(id)
+        db.session.delete(event)
+        db.session.commit()
+        flash('Event successfully deleted')
+    return redirect(url_for('events.index'))
 
 @events.route('/')
 def index():
@@ -45,7 +57,7 @@ def login():
                 return redirect(url_for('events.register'))
     return render_template('events/login.html', form=form)
 
-@events.route('/new', methods=['GET', 'POST'])
+@events.route('/new_event', methods=['GET', 'POST'])
 def new_event():
     if not session.get('admin'):
         flash('You must login as admin to add an event')
