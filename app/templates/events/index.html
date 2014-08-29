@@ -3,38 +3,22 @@
 <ul class="entries">
     <h2 id="marker"></h2>
     {% for event in event_list %}
-    <h2 id= {{ event.id }} >{{ event.title }}</h2>
+    {% if not event.deleted %}
+    <span id="{{ event.id }}"><h2>{{ event.title }}</h2></span>
     <script type="text/javascript">
         var dateString = "{{ event.thedate }}";
         dateString = dateString.replace(/-/g, ' ');
         var d = new Date(dateString);
-        $('#{{ event.id }}').after('<p>' + "{{ event.room|safe }}<br>" + d.toDateString() + ', ' + d.toLocaleTimeString() + '</p>'); 
+        $('#{{ event.id }}').after('<span id="p'+ {{ event.id }} +'"<p>' + "{{ event.room|safe }}<br>" + d.toDateString() + ', ' + d.toLocaleTimeString() + '</p></span>'); 
     </script>
+    {% if session.admin %}
+    <a href={{ url_for('events.edit_event', id=event.id) }}>edit</a>
+    <a href={{ url_for('events.delete', id=event.id) }} style="padding-left: 1em;">delete</a>
+    {% endif %}
+    {% endif %}
     {% else %}
         <em id="em">No events here so far</em>
     {% endfor %}
 </ul>
-<script type="text/javascript">
-    setInterval(function() {
-        $.getJSON($SCRIPT_ROOT + '/test', {}, function(data) {
-            var data_id = parseInt(data.id);
-            if (data_id != -1) {
-                var to_str = String(data_id);
-                var h2_id = document.getElementById(to_str);
-                if (h2_id != null) {
-                } else {
-                    if (! $('#new').length) {
-                    $('#em').hide();
-                    var dateString = data.thedate;
-                    dateString = dateString.replace(/-/g, ' ');
-                    dateString = dateString.replace(/GMT/g, ' ');
-                    var d = new Date(dateString);
-                    $('#marker').before('<h2 id="new">' + data.title + '</h2><p>' + data.room + '<br>' + d.toDateString() + ', ' + d.toLocaleTimeString() + '</p>');
-                    }
-                }
-            }
-            return false;
-        });
-    }, 30000);
-</script>
+<script src="{{ url_for('static', filename='longpoll.js') }}"</script>
 {% endblock %}

@@ -3,6 +3,7 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class BaseConfig(object):
+    CSRF_ENABLED = True
     SECRET_KEY = os.environ.get('SECRET_KEY')
     ADMIN = os.environ.get('ADMIN')
     ADMIN_PASS = os.environ.get('ADMIN_PASS')

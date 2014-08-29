@@ -9,19 +9,19 @@
     {{ form.hidden_tag() }}
     <div class="form-group ">
         <label class="control-label" for="title">Title</label>
-        <input class="form-control" id="title" name="title" required type="text" value="">
+        <input class="form-control" id="title" name="title" required type="text" value="{{ form.title.data }}">
     </div>
-
+    
     <div class="form-group ">
         <label class="control-label" for="room">Room</label>
-        <input class="form-control" id="room" name="room" required type="text" value="">
+        <input class="form-control" id="room" name="room" required type="text" value="{{ form.room.data }}">
     </div>
 
     <div class="form-group ">
         <label class="control-label" for="date">Date</label>
-        <input class="form-control" id="date" name="date" type="text" value=""><p class="help-block">hint: 2014-07-12 16:30:00 converts to Jul 12 2014, 4:30:00 PM</p>
+        <input class="form-control" id="date" name="date" type="text" value="{{ form.date.data }}"><p class="help-block">hint: 2014-07-12 16:30:00 converts to Jul 12 2014, 4:30:00 PM</p>
     </div>
-
-  <input class="btn btn-default" id="submit" name="submit" type="submit" value="Post">
+  
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Post">
 </form>
 {% endblock %}

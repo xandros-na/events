@@ -15,3 +15,5 @@ class Events(db.Model):
     room = db.Column(db.String(12), nullable=False)
     thedate = db.Column(db.DateTime())
     posted_date = db.Column(db.String(128), nullable=False)
+    replaced_id = db.Column(db.Integer)
+    deleted = db.Column(db.Boolean, default=False)

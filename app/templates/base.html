@@ -1,13 +1,9 @@
-{% extends "bootstrap/base.html" %}
-
-{% block title %}Events{% endblock %}
-
 {% block head %}
-{{ super() }}
+    <title>Events</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.css') }}">
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
     <script type="text/javascript"
-    src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script type="text/javascript">
     var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
     </script>
@@ -35,12 +31,17 @@
 {% block content %}
 <div class="container">
     {% for msgs in get_flashed_messages() %}
-    <div class="alert alert-warning">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <div id="flash" class="alert alert-warning">
+        <button id="button" type="button" class="close" data-dismiss="alert">&times;</button>
         {{ msgs }}
     </div>
     {% endfor %}
     {% block page_content %}
     {% endblock %}
 </div>
+<script type="text/javascript">
+$('#button').click(function() {
+    $('#flash').hide();
+    });
+</script>
 {% endblock %}
