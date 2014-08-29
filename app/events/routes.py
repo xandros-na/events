@@ -15,14 +15,6 @@ def update():
     else:
         return jsonify(id=new_event.id, title=new_event.title, room=new_event.room, thedate=new_event.thedate, replaced_id=new_event.replaced_id, deleted=new_event.deleted)
 
-@events.route('/longpoll/<string:id>')
-def longpoll(id):
-    statement = "SELECT * FROM events WHERE id>=" + (id)
-    query = Events.query.from_statement(statement)
-    for i in query.all():
-        print(i.id, i.title)
-    return jsonify(text='message')
-
 @events.route('/delete/<int:id>', methods=['GET', 'POST'])
 def delete(id):
     if not session.get('admin'):

@@ -20,27 +20,5 @@
         <em id="em">No events here so far</em>
     {% endfor %}
 </ul>
-<script type="text/javascript">
-    function longpoll() {
-        var latest = String($('span').first().attr('id'));
-        $.ajax({
-                type: "GET",
-                url: $SCRIPT_ROOT + '/longpoll/' + latest, 
-                async: true,
-                dataType: 'json',
-                timeout: 10000,
-
-                success: function(data) {
-                    console.log('success');
-                    console.log(data.text);
-                    setTimeout(longpoll, 10000);
-                    }
-                });
-    }
-    
-    $(document).ready(function() {
-            longpoll();
-            });
-
-</script>
+<script src="{{ url_for('static', filename='longpoll.js') }}"</script>
 {% endblock %}
