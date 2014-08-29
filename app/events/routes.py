@@ -4,6 +4,8 @@ from ..models import Events
 from .. import db
 from flask import render_template, request, current_app, redirect, url_for, flash, session, jsonify, Response
 from .forms import LoginForm, EventForm, UserForm
+from time import sleep
+from sqlalchemy import select, text
 
 @events.route('/update')
 def update():
@@ -12,6 +14,14 @@ def update():
         return jsonify(id=-1, title=None, room=None, date=None, replaced_id=None)
     else:
         return jsonify(id=new_event.id, title=new_event.title, room=new_event.room, thedate=new_event.thedate, replaced_id=new_event.replaced_id, deleted=new_event.deleted)
+
+@events.route('/longpoll/<string:id>')
+def longpoll(id):
+    statement = "SELECT * FROM events WHERE id>=" + (id)
+    query = Events.query.from_statement(statement)
+    for i in query.all():
+        print(i.id, i.title)
+    return jsonify(text='message')
 
 @events.route('/delete/<int:id>', methods=['GET', 'POST'])
 def delete(id):
