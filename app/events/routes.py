@@ -11,7 +11,7 @@ def update():
     if new_event is None:
         return jsonify(id=-1, title=None, room=None, date=None, replaced_id=None)
     else:
-        return jsonify(id=new_event.id, title=new_event.title, room=new_event.room, thedate=new_event.thedate, replaced_id=new_event.replaced_id)
+        return jsonify(id=new_event.id, title=new_event.title, room=new_event.room, thedate=new_event.thedate, replaced_id=new_event.replaced_id, deleted=new_event.deleted)
 
 @events.route('/delete/<int:id>', methods=['GET', 'POST'])
 def delete(id):
@@ -20,8 +20,13 @@ def delete(id):
         return redirect(url_for('events.login'))
     else:
         event = Events.query.get_or_404(id)
-        db.session.delete(event)
-        db.session.commit()
+        posted_date = datetime.now()
+        posted_date = str(posted_date.strftime('%Y-%m-%d %H:%M:%S'))
+        if not event.deleted:
+            event.deleted = True
+            event.posted_date = posted_date
+            db.session.add(event)
+            db.session.commit()
         flash('Event successfully deleted')
     return redirect(url_for('events.index'))
 
