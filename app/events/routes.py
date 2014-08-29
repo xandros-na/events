@@ -4,6 +4,8 @@ from ..models import Events
 from .. import db
 from flask import render_template, request, current_app, redirect, url_for, flash, session, jsonify, Response
 from .forms import LoginForm, EventForm, UserForm
+from time import sleep
+from sqlalchemy import select, text
 
 @events.route('/update')
 def update():
