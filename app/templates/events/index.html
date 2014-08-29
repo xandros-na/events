@@ -3,6 +3,7 @@
 <ul class="entries">
     <h2 id="marker"></h2>
     {% for event in event_list %}
+    {% if not event.deleted %}
     <span id="{{ event.id }}"><h2>{{ event.title }}</h2></span>
     <script type="text/javascript">
         var dateString = "{{ event.thedate }}";
@@ -13,6 +14,7 @@
     {% if session.admin %}
     <a href={{ url_for('events.edit_event', id=event.id) }}>edit</a>
     <a href={{ url_for('events.delete', id=event.id) }} style="padding-left: 1em;">delete</a>
+    {% endif %}
     {% endif %}
     {% else %}
         <em id="em">No events here so far</em>
@@ -26,6 +28,10 @@
             if (data_id != -1) { // check if database is empty 
                 var to_str = String(data_id);
                 var h2_id = document.getElementById(to_str);
+                if (data.deleted) {
+                    $('span[id=' + data.id +  ']').hide();                    
+                $('span[id=p' + data.id +  ']').hide();                    
+                } else {
                 if (h2_id != null) { // check if there is an id with data_id 
                 } else {
                     if (! $('#data.id').length) { // check if this an already existing tag with this id
@@ -43,6 +49,7 @@
                     }
                     }
                 }
+            }
             } 
             return false;
         });

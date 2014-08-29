@@ -16,3 +16,4 @@ class Events(db.Model):
     thedate = db.Column(db.DateTime())
     posted_date = db.Column(db.String(128), nullable=False)
     replaced_id = db.Column(db.Integer)
+    deleted = db.Column(db.Boolean, default=False)
