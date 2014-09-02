@@ -1,6 +1,6 @@
 from datetime import datetime
 from . import events
-from ..models import Events
+from ..models import Events, User
 from .. import db
 from flask import render_template, request, current_app, redirect, url_for, flash, session, jsonify, Response
 from .forms import LoginForm, EventForm, UserForm
@@ -37,10 +37,24 @@ def index():
     event_list = Events.query.order_by(Events.thedate.desc())
     return render_template('events/index.html', event_list=event_list)
 
-@events.route('/register')
+@events.route('/register', methods=['GET', 'POST'])
 def register():
-    form = UserForm()
-    return render_template('events/register.html', form=form)
+    if not session.get('user'):
+        flash('You must log in as user to register')
+        return redirect(url_for('events.login'))
+    else:
+        form = UserForm(payment='1')
+        if form.validate_on_submit():
+            user = User(first_name=form.first_name.data, last_name=form.last_name.data, student_num=form.student_num.data, payment=form.payment.data)
+            form.first_name.data=""
+            form.last_name.data=""
+            form.student_num.data=""
+            form.payment.data="1"
+            db.session.add(user)
+            db.session.commit()
+            flash('success')
+            return render_template('events/register.html', form=form)
+        return render_template('events/register.html', form=form)
 
 @events.route('/login', methods=['GET', 'POST'])
 def login():

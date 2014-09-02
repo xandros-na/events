@@ -7,6 +7,7 @@ class User(db.Model):
     first_name = db.Column(db.String(64), nullable=False)
     last_name = db.Column(db.String(64), nullable=False)
     student_num = db.Column(db.Integer(), nullable=False)
+    payment = db.Column(db.Integer(), nullable=False)
 
 class Events(db.Model):
     __tablename__ = 'events'

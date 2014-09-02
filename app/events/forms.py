@@ -1,9 +1,9 @@
 from flask.ext.wtf import Form
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, DateTimeField, IntegerField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, DateTimeField, IntegerField, RadioField
 from wtforms.validators import Required, Length
 
 class LoginForm(Form):
-    username = StringField('Username', validators=[Required(), Length(1, 64)])
+    username = StringField('Username', validators=[Required(), Length(1, 12)])
     password = PasswordField('Password', validators=[Required()])
     submit = SubmitField('Log In')
 
@@ -27,5 +27,6 @@ class EventForm(Form):
 class UserForm(Form):
     first_name = StringField('First Name', validators=[Required(), Length(1,16)])
     last_name = StringField('Last Name', validators=[Required(), Length(1,16)])
-    student_num = IntegerField('Student Number', validators=[Required(), Length(1,9)])
+    student_num = StringField('Student Number', validators=[Required(), Length(9,9, 'Student number must be 9 characters long')])
+    payment = RadioField('Payment', choices=[('1','$ 5.00 This session only'), ('2','$10.00 One year'), ('3','$20.00 Lifetime')])
     submit = SubmitField('Register')
